@@ -1,5 +1,4 @@
 import json
-
 import bot
 
 file = open("config.json")

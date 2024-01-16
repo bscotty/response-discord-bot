@@ -1,5 +1,4 @@
 import json
-
 import discord
 
 from response import Response
