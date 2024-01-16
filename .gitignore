@@ -1,4 +1,4 @@
-venv
-__pycache__
-reactions.json
+build/**
+node_modules
 config.json
+reactions.json
