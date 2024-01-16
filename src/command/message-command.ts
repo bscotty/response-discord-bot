@@ -1,4 +1,5 @@
 import {Message} from "discord.js";
+import {Response} from "../responses/response";
 import {ResponseRepository} from "../responses/response-repository";
 
 export class MessageCommand {
@@ -13,21 +14,22 @@ export class MessageCommand {
             const messageText = interaction.content.toLowerCase()
             if (response.wildcard) {
                 if (messageText.includes(response.matcher)) {
-                    this.respond(interaction, response.reaction, response.responseText)
+                    this.respond(interaction, response)
                 }
             } else {
                 if (messageText == response.matcher) {
-                    this.respond(interaction, response.reaction, response.responseText)
+                    this.respond(interaction, response)
                 }
             }
         })
     }
 
-    private async respond(interaction: Message, reaction: boolean, responseText: string) {
-        if (reaction) {
-            await interaction.react(responseText)
+    private async respond(interaction: Message, response: Response) {
+        console.log(`found response to message \"${interaction.content}\" with ${JSON.stringify(response)}`)
+        if (response.reaction) {
+            await interaction.react(response.response_text)
         } else {
-            await (await interaction.channel.fetch()).send(responseText)
+            await (await interaction.channel.fetch()).send(response.response_text)
         }
     }
 }

@@ -5,7 +5,7 @@ import {ResponseRepository} from "../responses/response-repository";
 const MATCHER = "to"
 
 export class RemoveResponseCommand extends BotCommand {
-    override readonly name = "remove-response"
+    override readonly name = "response-clear"
     override readonly builder = new SlashCommandBuilder()
         .addStringOption((option) => option
             .setName(MATCHER)
@@ -27,9 +27,9 @@ export class RemoveResponseCommand extends BotCommand {
         const response = this.repository.read().find((it) => it.matcher == matcher.toLowerCase())
         if (response) {
             this.repository.remove(response)
-            await interaction.reply("Deleted!")
+            await interaction.reply(`Got it! I'll no longer respond to \"${response.matcher}\"!`)
         } else {
-            await interaction.reply(`I can't find any response to ${matcher}!`)
+            await interaction.reply(`I can't find any response to \"${matcher}\"!`)
         }
     }
 }

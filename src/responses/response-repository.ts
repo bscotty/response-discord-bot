@@ -29,7 +29,7 @@ class JsonFileReader<T> {
     }
 
     write(input: T) {
-        fs.writeFileSync(this.file(), JSON.stringify(input))
+        fs.writeFileSync(this.file(), JSON.stringify(input, null, 2))
     }
 
     getJson(): T {

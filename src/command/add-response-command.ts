@@ -9,7 +9,7 @@ const WILDCARD = "wildcard"
 const REACT = "react"
 
 export class AddResponseCommand extends BotCommand {
-    override readonly name = "add-new-response"
+    override readonly name = "respond"
     override readonly builder = new SlashCommandBuilder()
         .addStringOption((option) => option
             .setName(MATCHER)
@@ -56,9 +56,9 @@ export class AddResponseCommand extends BotCommand {
         const existingResponse = this.repository.read().find((it) => it.matcher == matcher)
         this.repository.add(new Response(matcher.toLowerCase(), response, wildcard, react))
         if (existingResponse) {
-            await interaction.reply(`Okay, but I'm getting rid of an existing response to ${existingResponse.matcher}: ${existingResponse.responseText}!`)
+            await interaction.reply(`Got it, I'll respond to \"${matcher}\" with \"${response}\", but I'll no longer respond with: \"${existingResponse.response_text}\"!`)
         } else {
-            await interaction.reply("Got it!")
+            await interaction.reply(`Got it, I'll respond to \"${matcher}\" with \"${response}\"!`)
         }
     }
 }
