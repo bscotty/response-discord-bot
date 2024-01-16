@@ -27,9 +27,9 @@ export class RemoveResponseCommand extends BotCommand {
         const response = this.repository.read().find((it) => it.matcher == matcher.toLowerCase())
         if (response) {
             this.repository.remove(response)
-            await interaction.reply(`Got it! I'll no longer respond to \"${response.matcher}\"!`)
+            await interaction.reply(`Got it! I'll no longer respond to "${response.matcher}"!`)
         } else {
-            await interaction.reply(`I can't find any response to \"${matcher}\"!`)
+            await interaction.reply(`I can't find any response to "${matcher}"!`)
         }
     }
 }

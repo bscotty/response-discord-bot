@@ -25,7 +25,7 @@ export class MessageCommand {
     }
 
     private async respond(interaction: Message, response: Response) {
-        console.log(`found response to message \"${interaction.content}\" with ${JSON.stringify(response)}`)
+        console.log(`found response to message "${interaction.content}" with ${JSON.stringify(response)}`)
         if (response.reaction) {
             await interaction.react(response.response_text)
         } else {

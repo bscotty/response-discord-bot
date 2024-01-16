@@ -56,9 +56,9 @@ export class AddResponseCommand extends BotCommand {
         const existingResponse = this.repository.read().find((it) => it.matcher == matcher)
         this.repository.add(new Response(matcher.toLowerCase(), response, wildcard, react))
         if (existingResponse) {
-            await interaction.reply(`Got it, I'll respond to \"${matcher}\" with \"${response}\", but I'll no longer respond with: \"${existingResponse.response_text}\"!`)
+            await interaction.reply(`Got it, I'll respond to "${matcher}" with "${response}", but I'll no longer respond with: \"${existingResponse.response_text}\"!`)
         } else {
-            await interaction.reply(`Got it, I'll respond to \"${matcher}\" with \"${response}\"!`)
+            await interaction.reply(`Got it, I'll respond to "${matcher}" with "${response}"!`)
         }
     }
 }

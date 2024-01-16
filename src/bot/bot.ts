@@ -30,7 +30,6 @@ export class Bot {
             .catch((reason) => console.error(reason))
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     public async addCommands(interactionCreateCommands: BotCommand[], messageCommand: MessageCommand) {
         await this.registerCommands(interactionCreateCommands.map((it) => it.builder))
 
