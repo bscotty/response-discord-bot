@@ -67,7 +67,7 @@ export class Bot {
         })
 
         this.client.on("messageCreate", async interaction => {
-            await messageCommand.invoke(interaction)
+            await messageCommand.invoke(interaction, this.client)
         })
 
         this.client.on("threadCreate", async interaction => {
