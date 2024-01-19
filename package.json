@@ -8,7 +8,7 @@
     "clean": "rm -rf build",
     "build": "tsc -p .",
     "run": "node build/src/main.js",
-    "cleanBuildRun": "rm -rf build && tsc -p . || node build/src/main.js",
+    "cleanBuildRun": "rm -rf build && tsc -p . && node build/src/main.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],

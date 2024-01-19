@@ -62,12 +62,20 @@ export class Bot {
 
             const command = interactionCreateCommands.find((it) => it.name == commandName)
             if (command) {
-                await command.invoke(interaction)
+                try {
+                    await command.invoke(interaction)
+                } catch (e) {
+                    console.error(e)
+                }
             }
         })
 
         this.client.on("messageCreate", async interaction => {
-            await messageCommand.invoke(interaction)
+            try {
+                await messageCommand.invoke(interaction, this.client)
+            } catch (e) {
+                console.error(e)
+            }
         })
 
         this.client.on("threadCreate", async interaction => {
