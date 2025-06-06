@@ -52,6 +52,7 @@ export class AddResponseCommand extends BotCommand {
         if (react == null) {
             react = false
         }
+        console.log(`Adding response "${response}" for matcher "${matcher}" - wildcard (${wildcard}) react (${react})`)
 
         const existingResponse = this.repository.read().find((it) => it.matcher == matcher)
         if (existingResponse) {

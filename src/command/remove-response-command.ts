@@ -25,6 +25,7 @@ export class RemoveResponseCommand extends BotCommand {
     override async invoke(interaction: ChatInputCommandInteraction): Promise<void> {
         const matcher = interaction.options.getString(MATCHER)
         const response = this.repository.read().find((it) => it.matcher == matcher.toLowerCase())
+        console.log(`Attempting to remove response to ${matcher}`)
         if (response) {
             this.repository.remove(response)
             await interaction.reply(`Got it! I'll no longer respond to "${response.matcher}"!`)
