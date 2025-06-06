@@ -1,7 +1,8 @@
-import {Client, GatewayIntentBits, REST, Routes, SlashCommandBuilder} from "discord.js";
+import {Client, GatewayIntentBits, REST, Routes} from "discord.js";
 import {Config} from "./config";
 import {BotCommand} from "../command/bot-command";
 import {MessageCommand} from "../command/message-command";
+import {AutocompleteCommand} from "../command/autocomplete-command";
 
 export class Bot {
     protected readonly client: Client
@@ -30,19 +31,23 @@ export class Bot {
             .catch((reason) => console.error(reason))
     }
 
-    public async addCommands(interactionCreateCommands: BotCommand[], messageCommand: MessageCommand) {
-        await this.registerCommands(interactionCreateCommands.map((it) => it.builder))
+    public async addCommands(
+        interactionCreateCommands: BotCommand[],
+        autocompleteCommands: AutocompleteCommand[],
+        messageCommand: MessageCommand
+    ) {
+        await this.registerCommands(interactionCreateCommands)
 
         if (interactionCreateCommands.length == 0)
             throw Error("Empty slash command list")
 
-        this.listenForCommands(interactionCreateCommands, messageCommand)
+        this.listenForCommands(interactionCreateCommands, autocompleteCommands, messageCommand)
     }
 
-    private async registerCommands(commands: SlashCommandBuilder[]) {
+    private async registerCommands(commands: BotCommand[]) {
         const requests: Promise<void>[] = this.config.guildIds.map(async (guild) => {
             const route = Routes.applicationGuildCommands(this.config.botApplicationId, guild)
-            const body = {body: commands.map((it) => it.toJSON())}
+            const body = {body: commands.map((it) => it.builder.toJSON())}
             await this.rest.put(route, body)
                 .then(() => {
                     const commandNames = commands.map((it) => it.name).join(",")
@@ -54,9 +59,31 @@ export class Bot {
             .catch((reason) => console.error(reason))
     }
 
-    private listenForCommands(interactionCreateCommands: BotCommand[], messageCommand: MessageCommand) {
+    private listenForCommands(
+        interactionCreateCommands: BotCommand[],
+        autocompleteCommands: AutocompleteCommand[],
+        messageCommand: MessageCommand
+    ) {
         this.client.on("interactionCreate", async interaction => {
-            if (!interaction.isChatInputCommand()) return;
+            if (!this.config.guildIds.includes(interaction.guild.id)) {
+                console.warn(`Ignoring command from unknown guild: ${interaction.guild.id} - ${interaction.guild.name}`)
+                return
+            }
+
+            if (interaction.isAutocomplete()) {
+                const {commandName} = interaction
+                const command = autocompleteCommands.find((it) => it.name == commandName)
+                if (command) {
+                    try {
+                        await command.invoke(interaction)
+                    } catch (e) {
+                        console.error(e)
+                    }
+                } else {
+                    console.warn(`Could not find autocomplete for command ${commandName}`)
+                }
+                return
+            } else if (!interaction.isChatInputCommand()) return;
 
             const {commandName} = interaction
 
