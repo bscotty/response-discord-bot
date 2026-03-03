@@ -12,7 +12,7 @@ export class MessageCommand {
     async invoke(interaction: Message, client: Client): Promise<void> {
         this.repository.read().forEach((response) => {
             const messageText = interaction.content.toLowerCase()
-            const matcher = interaction.content.toLowerCase()
+            const matcher = response.matcher.toLowerCase()
             if (response.wildcard) {
                 if (messageText.includes(matcher)) {
                     this.respond(interaction, response, client)
